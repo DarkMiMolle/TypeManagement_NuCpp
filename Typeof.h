@@ -17,8 +17,8 @@ constexpr const NuType_t auto& Typeof(var<T>&) {
 
 template<NuType_t T>
 constexpr const auto& Typeof(const T& val) {
-    if constexpr(std::are_similar<T, NuType<0>>) { return val; }
-    if constexpr(!std::are_similar<T, NuType<0>>) { return T::Self; }
+    if constexpr(std::are_similar<T, NuType<"Type">>) { return val; }
+    if constexpr(!std::are_similar<T, NuType<"Type">>) { return T::Self; }
 }
 
 #define TypeofExpr(expr) cpp_type_info<std::just_t<decltype(expr)>>::NuTypeVal

@@ -34,8 +34,8 @@ template <typename T>
 var(T&&) -> var<typename cpp_type_info<T>::NuTypeRef>;
 
 template <>
-struct var<NuType<0>> {
-    using T = NuType<0>::cpp_type;
+struct var<NuType<"Type">> {
+    using T = NuType<"Type">::cpp_type;
     T val = T();
 
     var() = default;
@@ -53,4 +53,4 @@ struct var<NuType<0>> {
 };
 
 template <NuType_t T>
-var(const T&) -> var<NuType<0>>;
+var(const T&) -> var<NuType<"Type">>;

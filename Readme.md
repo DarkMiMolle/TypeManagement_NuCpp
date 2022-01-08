@@ -3,7 +3,7 @@ A first idea of how i will manage type creation and type usage in my Nu language
 
 ## How to use it ?
 Every type we want to record must respect the concept `NuType_t` (define in _NuType.h_).
-The best way to do it is to specify the template structure: `NuType<size_t>`. Then we shall specify the template structure: `cpp_type_info<type T>` to make a link between RValue of C++ and the type for Nu.
+The best way to do it is to specify the template structure: `NuType<StringLiteral>`. Then we shall specify the template structure: `cpp_type_info<type T>` to make a link between RValue of C++ and the type for Nu.
 
 <u>Let's see an example:</u>
 
@@ -11,7 +11,7 @@ The best way to do it is to specify the template structure: `NuType<size_t>`. Th
 #include "NuType.h"
 
 template <>
-struct NuType<42> : nutype_address {
+struct NuType<"Complex"> : nutype_address {
     struct Complex {
         float re, im;
     };
@@ -25,24 +25,24 @@ struct NuType<42> : nutype_address {
         return Complex{re, im};
     }
     
-    constexpr bool operator == (const NuType<42>& t) const {
+    constexpr bool operator == (const NuType<"Complex">& t) const {
         return &t == this;
     }
     constexpr bool operator == (const nutype_address* t) const {
         return t == this;
     }
 
-    static const NuType<42>& Self;
+    static const NuType<"Complex">& Self;
 
-    inline static constexpr const typeinfo_getter_of<NuType<42>> TypeVal = {};
+    inline static constexpr const typeinfo_getter_of<NuType<"Complex">> TypeVal = {};
 };
-constexpr const NuType<42> Complex = NuType<42>();
-const NuType<42>& NuType<42>::Self = Complex;
+constexpr const NuType<"Complex"> Complex = NuType<"Complex">();
+const NuType<"Complex">& NuType<"Complex">::Self = Complex;
 template <>
-struct cpp_type_info<NuType<42>::t> {
-    using NuTypeRef = NuType<42>;
+struct cpp_type_info<NuType<"Complex">::t> {
+    using NuTypeRef = NuType<"Complex">;
     inline static constexpr auto& NuTypeVal = Complex;
 };
-
-
 ```
+As you can see we created a `constexpr` value of the `NuType<"Complex">` named *Complex*. It will the reference to create a `Complex`, it should be the only value of `NuType<"Complex">`.
+Then we specify the `cpp_type_info<NuType<"Complex">::t>` to make the link between the `Complex`'s value and the the `NuType<"Complex">` (So a link between the value and its type).

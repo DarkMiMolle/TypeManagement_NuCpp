@@ -3,7 +3,7 @@
 
 struct nutype_address {
 };
-template <size_t id>
+template <std::StringLiteral name>
 struct NuType;
 
 struct typeinfo_getter {
@@ -31,57 +31,7 @@ struct typeinfo_getter_of: public typeinfo_getter {
     constexpr operator const nutype_address *() const override {
         return &T::Self;
     }
-/*
-    constexpr void Init(void *into) const override {
-        //*(typename T::t*)into = new typename T::t;
-    }
-    constexpr void* _new() const override {
-        return new typename T::t;
-    }
-    constexpr void* _cpy(void* data) const override {
-        if (!data) return nullptr;
-        using Type = typename T::t;
-        Type* elem = (Type*)_new();
-        *elem = *(Type*)data;
-        return elem;
-    }
-    constexpr void _delete(void *data) const override {
-        delete (typename T::t*)data;
-    }
-    */
 };
-/*
-template <>
-struct typeinfo_getter_of<typeinfo_getter>: nutype_address, public typeinfo_getter {
-    constexpr const char *Name() const override {
-        return "nil";
-    }
-
-    constexpr size_t ID() const override {
-        return size_t(-1);
-    }
-
-    constexpr operator const nutype_address *() const override {
-        return this;
-    }
-
-    constexpr void Init(void *into) const override {
-        //*(typename T::t*)into = new typename T::t;
-    }
-    constexpr void* _new() const override {
-        return nullptr;
-    }
-    constexpr void* _cpy(void* data) const override {
-        return nullptr;
-    }
-    constexpr void _delete(void *data) const override {
-        void;
-    }
-};
-
-constexpr const auto DynamicNuType = typeinfo_getter_of<typeinfo_getter>();
-constinit const typeinfo_getter& typeinfo_getter::Self = DynamicNuType;
-*/
 
 template <typename T>
 concept NuType_t = requires (const std::just_t<T>& Elem){

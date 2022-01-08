@@ -6,6 +6,7 @@
 #include <tuple>
 #include <variant>
 #include <optional>
+#include <algorithm>
 
 namespace std {
     template <typename T>
@@ -19,6 +20,15 @@ namespace std {
     template <typename T1, typename T2>
     concept has_implicit_cast_to = requires (T1& from, T2& to){
         to = from;
+    };
+
+    template<size_t N>
+    struct StringLiteral {
+        constexpr StringLiteral(const char (&str)[N]) {
+            copy_n(str, N, value);
+        }
+    
+        char value[N];
     };
 
 }

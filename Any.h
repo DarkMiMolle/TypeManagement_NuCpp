@@ -4,7 +4,7 @@
 #include "Typeof.h"
 #include <functional>
 
-using NuTypeAny = NuType<size_t(-1)>;
+using NuTypeAny = NuType<"any">;
 
 struct Any;
 
@@ -20,7 +20,7 @@ struct typeinfo_getter_of<NuTypeAny>: public typeinfo_getter {
 };
 
 template <>
-struct NuType<size_t(-1)>: nutype_address {
+struct NuType<"any">: nutype_address {
     const typeinfo_getter* type = &Type.TypeVal;
 
     using t = Any;
@@ -29,8 +29,8 @@ struct NuType<size_t(-1)>: nutype_address {
     size_t ID = type->ID();
     inline static constexpr bool IsBuiltin = false;
 
-    const NuType<size_t(-1)>& Self = *this;
-    const typeinfo_getter_of<NuType<size_t(-1)>> TypeVal = {this};
+    const NuType<"any">& Self = *this;
+    const typeinfo_getter_of<NuType<"any">> TypeVal = {this};
 
     NuType() = default;
     NuType(const typeinfo_getter* type): type(type) {}
