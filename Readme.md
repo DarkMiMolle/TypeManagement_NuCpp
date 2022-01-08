@@ -46,3 +46,25 @@ struct cpp_type_info<NuType<"Complex">::t> {
 ```
 As you can see we created a `constexpr` value of the `NuType<"Complex">` named *Complex*. It will the reference to create a `Complex`, it should be the only value of `NuType<"Complex">`.
 Then we specify the `cpp_type_info<NuType<"Complex">::t>` to make the link between the `Complex`'s value and the the `NuType<"Complex">` (So a link between the value and its type).
+
+After defining your type you can start using `var` (define in *Var.h*) and `Typeof`/`TypeofExpr` functions/macro (define in *Typeof.h*).
+It is also recommanded to create an alias of the NuType you just created.
+
+Let's see an example. We assume we've made all `include` and we use the code define above.
+
+```c++
+
+template <StringLiteral type_name>
+using type = NuType<type_name>::t;
+
+#define Typeof_t(expr) std::just_t<decltype(TypeofExpr(expr))>
+
+int main() {
+    var a = Complex(); // ok !!
+    var<Typeof_t(a)> b; // ok !!
+    if constexpr (Typeof(a) == Complex) {
+        // ok !!
+    }
+    var<Complex_t> c;
+}
+```
